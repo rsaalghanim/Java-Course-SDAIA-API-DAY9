@@ -20,6 +20,8 @@ public class EmployeeDAO {
     private static final String SELECT_ALL_EMPS = "select * from employees";
     private static final String UPDATE_EMP = "update employees set email = ?, salary = ? where employee_id = ?";
     private static final String DELETE_EMP = "delete from employees where employee_id = ?";
+    private static final String SELECT_ONE_EMP_JOIN_JOBS = "select * from employees join jobs on employees.job_id = jobs.job_id where employee_id = ?";
+
 
 
     public void insertEmp(Employee e) throws SQLException, ClassNotFoundException {
@@ -61,6 +63,20 @@ public class EmployeeDAO {
         Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection(URL);
         PreparedStatement st = conn.prepareStatement(SELECT_ONE_EMP);
+        st.setInt(1, employee_id);
+        ResultSet rs = st.executeQuery();
+        if(rs.next()) {
+            return new Employee(rs);
+        }
+        else {
+            return null;
+        }
+    }
+
+    public Employee selectEmpJoinJob(int employee_id) throws SQLException, ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        Connection conn = DriverManager.getConnection(URL);
+        PreparedStatement st = conn.prepareStatement(SELECT_ONE_EMP_JOIN_JOBS);
         st.setInt(1, employee_id);
         ResultSet rs = st.executeQuery();
         if(rs.next()) {

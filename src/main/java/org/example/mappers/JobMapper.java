@@ -6,7 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.example.models.job;
 
 
-@Mapper
+@Mapper(componentModel = "cdi")
 public interface JobMapper {
     JobMapper INSTANCE = Mappers.getMapper(JobMapper.class);
 

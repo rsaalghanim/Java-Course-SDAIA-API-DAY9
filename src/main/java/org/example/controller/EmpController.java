@@ -1,7 +1,9 @@
 package org.example.controller;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.example.dao.EmployeeDAO;
+import org.example.dao.JobDAO;
 import org.example.dto.EmployeeDto;
 import org.example.dto.EmployeeFilterDto;
 import org.example.dto.JobDto;
@@ -19,8 +21,12 @@ import java.util.ArrayList;
 public class EmpController {
 
         EmployeeDAO dao = new EmployeeDAO();
+        JobDAO jobDAO = new JobDAO();
     @Context UriInfo uriInfo;
     @Context HttpHeaders headers;
+
+    @Inject
+    EmployeeMapper mapper;
 
         @GET
         @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON,"text/csv"})
@@ -62,7 +68,8 @@ public class EmpController {
                 @PathParam("employee_id") int employee_id) throws SQLException{
 
             try {
-                Employee emps = dao.selectEmp(employee_id);
+                Employee emps = dao.selectEmpJoinJob(employee_id);
+                EmployeeDto dto = mapper.toEmpDto(emps);
 
 
                 if (emps == null) {
@@ -88,7 +95,7 @@ public class EmpController {
 //                dto.setSalary(emps.getSalary());
 //                dto.setManager_id(emps.getManager_id());
 //                dto.setDepartment_id(emps.getDepartment_id());
-                EmployeeDto dto = EmployeeMapper.INSTANCE.toEmpDto(emps);
+               // EmployeeDto dto = EmployeeMapper.INSTANCE.toEmpDto(emps);
 
                 addLinks(dto);
 
