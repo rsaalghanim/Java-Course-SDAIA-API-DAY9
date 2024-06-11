@@ -63,7 +63,7 @@ public class JobDAO {
             return null;//
         }
     }
-
+//
     public ArrayList<job> selectAllJobs(Double minsal, Integer limit, int offset) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         Connection conn = DriverManager.getConnection(URL);
